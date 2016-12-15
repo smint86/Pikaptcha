@@ -90,8 +90,15 @@ def parse_arguments(args):
     parser.add_argument(
         '-px','--proxy', type=str, default=None,
         help='Proxy to be used when accepting the Terms of Services. Must be host:port (ex. 1.1.1.1:80). Must be a HTTPS proxy.'
-    )        
-
+    )   
+    parser.add_argument(
+        '-dm','--dotmail', type=bool, default=False,
+        help='Adds in the dot in various places in the email.  Such as b.lah@ bl.ah@ bla.h@.    Recommended to have 10+ characters to the left of the @ sign.'
+    )  	
+    parser.add_argument(
+        '-dp','--dotmailPosition', type=int, default=1,
+        help='First position of the dot.  Defaults to 1'
+    )  	
     return parser.parse_args(args)
 
 def _verify_autoverify_email(settings):
@@ -133,7 +140,7 @@ def entry():
         print("This run will cost you approximately: " + str(float(args.count)*0.003))
 
     username = args.username    
-    
+    currentPosition = args.dotmailPosition
     if args.inputtext != None:
         print("Reading accounts from: " + args.inputtext)
         lines = [line.rstrip('\n') for line in open(args.inputtext, "r")]
@@ -144,6 +151,7 @@ def entry():
             with open(args.textfile, "a") as ulist:
                 ulist.write("The following accounts use the email address: " + args.plusmail + "\n")
                 ulist.close()
+        
         for x in range(0,args.count):
             print("Making account #" + str(x+1))
             if ((args.username != None) and (args.count != 1) and (args.inputtext == None)):
@@ -156,8 +164,28 @@ def entry():
                 args.password = ((lines[x]).split(":"))[1]
             try:
                 try:
-                    account_info = pikaptcha.random_account(username, args.password, args.email, args.birthday, args.plusmail, args.recaptcha, args.captchatimeout)
-                    
+                    numPasses = 0                    
+                    print"CurrentPosition: %d" %   (currentPosition)
+                    numChars = args.plusmail.find('@')
+                    account_info = pikaptcha.random_account(username, args.password, args.email, args.birthday, args.plusmail, args.recaptcha, args.captchatimeout, args.dotmail, numPasses, x,currentPosition )
+                    if numPasses % 3 == 0:
+                        if currentPosition + 1 == numChars:
+                          currentPosition  = 2
+                          numPasses+=1
+                        else:
+                          currentPosition+=1
+                    elif numPasses % 3 == 1:
+                        if currentPosition + 1 == numChars:
+                          currentPosition = 3
+                          numPasses+=1
+                        else:
+                          currentPosition+=1
+                    elif numPasses % 3 == 2:
+                        if currentPosition + 1 == numChars:
+                           currentPosition = 1
+                           numPasses += 1
+                        else:
+                          currentPosition += 1
                     print('  Username:  {}'.format(account_info["username"]))
                     print('  Password:  {}'.format(account_info["password"]))
                     print('  Email   :  {}'.format(account_info["email"]))

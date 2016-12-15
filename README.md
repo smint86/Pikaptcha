@@ -1,5 +1,50 @@
 # Pikaptcha
-**I am currently in the process of moving so development is going to be very slow for the next few days. A GUI is almost in place that will account for most of the user input errors. **
+@@@@  Added by Ags @@@@
+Added -dm true
+
+This makes it so that the email process adds a period in the email to trick the servers that it is a different email address.
+s.omeEmailForYou@gmail.com
+so.meEmailForYou@gmail.com
+som.eEmailForYou@gmail.com
+some.EmailForYou@gmail.com
+someE.mailForYou@gmail.com
+someEm.ailForYou@gmail.com
+someEma.ilForYou@gmail.com
+someEmai.lForYou@gmail.com
+someEmail.ForYou@gmail.com
+someEmailF.orYou@gmail.com
+someEmailFo.rYou@gmail.com
+someEmailFor.You@gmail.com
+someEmailForY.ou@gmail.com
+someEmailForYo.u@gmail.com
+s..omeEmailForYou@gmail.com
+s.o.meEmailForYou@gmail.com
+s.om.eEmailForYou@gmail.com
+s.ome.EmailForYou@gmail.com
+s.omeE.mailForYou@gmail.com
+s.omeEm.ailForYou@gmail.com
+s.omeEma.ilForYou@gmail.com
+s.omeEmai.lForYou@gmail.com
+s.omeEmail.ForYou@gmail.com
+s.omeEmailF.orYou@gmail.com
+s.omeEmailFo.rYou@gmail.com
+s.omeEmailFor.You@gmail.com
+s.omeEmailForY.ou@gmail.com
+s.omeEmailForYo.u@gmail.com
+so..meEmailForYou@gmail.com
+so.m.eEmailForYou@gmail.com
+so.me.EmailForYou@gmail.com
+so.meE.mailForYou@gmail.com
+so.meEm.ailForYou@gmail.com
+so.meEma.ilForYou@gmail.com
+so.meEmai.lForYou@gmail.com
+so.meEmail.ForYou@gmail.com
+so.meEmailF.orYou@gmail.com
+so.meEmailFo.rYou@gmail.com
+so.meEmailFor.You@gmail.com
+so.meEmailForY.ou@gmail.com
+so.meEmailForYo.u@gmail.com
+@@@@@@@@@@@@@@@@@@@@@@@
 
 Based off pikapy by skvvv, which is based off ptc2 Kitryn, which is based off ptcaccount by jepayne1138, etc.
 Also uses pogoapi from keyphact

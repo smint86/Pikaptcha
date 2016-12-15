@@ -31,6 +31,16 @@ BAD_DATA_URL = 'https://club.pokemon.com/us/pokemon-trainer-club/parents/sign-up
 
 def _random_string(length=15):
     return generate_words(3)
+	
+def _random_password(length=15):
+    a = generate_words(2)
+    b = generate_words(1)
+    c = generate_words(1).upper()	
+    special_character = ''.join(random.choice('#?!@$%%^&*-') for _ in range(1))
+    number = ''.join(random.choice('0123456789') for _ in range(1))
+    password = c + special_character + b + number + a
+    return password
+	
 
 def _random_email(local_length=10, sub_domain_length=5, top_domain=".com"):
     return "{local}@{sub_domain}{top_domain}".format(
@@ -48,7 +58,24 @@ def _random_birthday():
     birthday = start + datetime.timedelta(seconds=random_duration)
     return "{year}-{month:0>2}-{day:0>2}".format(year=birthday.year, month=birthday.month, day=birthday.day)
 
-
+def _insertChar(string, position, chartoinsert ):
+    return string[:position] + chartoinsert + string[position:] 
+	
+def _addPeriodToEmail(string,x, count, a):
+    if count % 3 == 0:
+      newString = _insertChar(string, a, '.')
+      return newString
+    elif count % 3 ==1:
+      newString2 = _insertChar(string, a, '.')
+      newString = _insertChar(newString2, 1, '.')
+      return newString
+    elif count % 3 == 2:
+      newString2 = _insertChar(string, a, '.')
+      newString = _insertChar(newString2, 2, '.')
+      return newString
+    else:
+      return ''
+	
 def _validate_birthday(birthday):
     # raises PTCInvalidBirthdayException if invalid
     # split by -
@@ -75,9 +102,9 @@ def _validate_birthday(birthday):
 
 
 def _validate_password(password):
-    # Check that password length is between 6 and 15 characters long
-    if len(password) < 6 or len(password) > 15:
-        raise PTCInvalidPasswordException('Password must be between 6 and 15 characters.')
+    # Check that password length is between 6 and 30 characters long
+    if len(password) < 6 or len(password) > 30:
+        raise PTCInvalidPasswordException('Password must be between 6 and 30 characters.')
     return True
 
 
@@ -143,6 +170,7 @@ def create_account(username, password, email, birthday, captchakey2, captchatime
         # Waits 1 minute for you to input captcha
         try:
             WebDriverWait(driver, 60).until(EC.text_to_be_present_in_element_value((By.NAME, "g-recaptcha-response"), ""))
+            print("Waiting on captcha")
             print("Captcha successful. Sleeping for 1 second...")
             time.sleep(1)
         except TimeoutException, err:
@@ -188,7 +216,7 @@ def create_account(username, password, email, birthday, captchakey2, captchatime
     try:
         _validate_response(driver)
     except:
-        print("Failed to create user: {}".format(username))
+        print("Failed to create user: {}".format(username))		
         driver.close()
         raise
 
@@ -202,22 +230,27 @@ def _validate_response(driver):
     if url in SUCCESS_URLS:
         return True
     elif url == DUPE_EMAIL_URL:
+        print ("Email already in use")
         raise PTCInvalidEmailException("Email already in use.")
     elif url == BAD_DATA_URL:
         if "Enter a valid email address." in driver.page_source:
+            print ("Invalid Email used")
             raise PTCInvalidEmailException("Invalid email.")
         else:
+            print ("Username already in use")
             raise PTCInvalidNameException("Username already in use.")
     else:
+        print ("Some other error")
         raise PTCException("Generic failure. User was not created.")
 
 
-def random_account(username=None, password=None, email=None, birthday=None, plusmail=None, recaptcha=None, captchatimeout=1000):
+def random_account(username=None, password=None, email=None, birthday=None, plusmail=None, recaptcha=None, captchatimeout=1000 ,dotmail=None, numPasses=None, accountsCreated=None,currentPosition=None ):
     try_username = _random_string() if username is None else str(username)
-    password = _random_string() if password is None else str(password)
-    try_email = _random_email() if email is None else str(email)
-    captchakey2 = None if recaptcha is None else str(recaptcha)
-    if plusmail is not None:
+    password = _random_password() if password is None else str(password)
+    try_email = _random_email() if email is None else str(email)	
+    captchakey2 = None if recaptcha is None else str(recaptcha)	    
+    #Only do plusmail or dotmail, not both.	
+    if plusmail is not None:        
         pm = plusmail.split("@")
         try_email = pm[0] + "+" + try_username + "@" + pm[1]
     try_birthday = _random_birthday() if birthday is None else str(birthday)
@@ -227,6 +260,9 @@ def random_account(username=None, password=None, email=None, birthday=None, plus
 
     account_created = False
     while not account_created:
+        if dotmail is not None:
+          try_email = _addPeriodToEmail(try_email,accountsCreated,numPasses,currentPosition)
+          print('Email to create account with: '+ try_email)
         try:
             account_created = create_account(try_username, password, try_email, try_birthday, captchakey2, captchatimeout)
         except PTCInvalidNameException:
