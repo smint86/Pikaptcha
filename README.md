@@ -3,6 +3,7 @@
 Added -dm true
 
 This makes it so that the email process adds a period in the email to trick the servers that it is a different email address.
+
 s.omeEmailForYou@gmail.com
 so.meEmailForYou@gmail.com
 som.eEmailForYou@gmail.com
@@ -44,14 +45,14 @@ so.meEmailFo.rYou@gmail.com
 so.meEmailFor.You@gmail.com
 so.meEmailForY.ou@gmail.com
 so.meEmailForYo.u@gmail.com
+
 @@@@@@@@@@@@@@@@@@@@@@@
 
 Based off pikapy by skvvv, which is based off ptc2 Kitryn, which is based off ptcaccount by jepayne1138, etc.
 Also uses pogoapi from keyphact
 
-Was updated with several features/fixes on Aug 23 2016. To update open CMD or terminal
-^^Update also broke (email verification) which is now fixed as of Aug 23 2016 5:30AM EST. Update again please.
-`pip install --upgrade git+https://github.com/sriyegna/pikaptcha`
+Was updated with several features/fixes on December 20 2016. To update open CMD or terminal
+`pip install --upgrade git+https://github.com/aguita/pikaptcha`
 
 ## Description
 Pikaptcha creates PTC accounts by creating a chrome session and automatically entering data in the required fields. If you choose to use the 2captcha service, the entire script can be run automatically, else you will need to manually solve captchas.
@@ -77,7 +78,7 @@ Install the following clickable links: (if you cannot click them, all links are 
 
 8. Shift+Right Click your desktop and "Open command window here".
 
-9. Type `pip install git+https://github.com/sriyegna/pikaptcha` and hit enter
+9. Type `pip install git+https://github.com/aguita/pikaptcha` and hit enter
 
 10. Type `pip install git+https://github.com/keyphact/pgoapi.git` and hit enter
 
