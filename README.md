@@ -1,55 +1,9 @@
 # Pikaptcha
-@@@@  Added by Ags @@@@
-Added -dm true
-
-This makes it so that the email process adds a period in the email to trick the servers that it is a different email address.
-
-s.omeEmailForYou@gmail.com
-so.meEmailForYou@gmail.com
-som.eEmailForYou@gmail.com
-some.EmailForYou@gmail.com
-someE.mailForYou@gmail.com
-someEm.ailForYou@gmail.com
-someEma.ilForYou@gmail.com
-someEmai.lForYou@gmail.com
-someEmail.ForYou@gmail.com
-someEmailF.orYou@gmail.com
-someEmailFo.rYou@gmail.com
-someEmailFor.You@gmail.com
-someEmailForY.ou@gmail.com
-someEmailForYo.u@gmail.com
-s..omeEmailForYou@gmail.com
-s.o.meEmailForYou@gmail.com
-s.om.eEmailForYou@gmail.com
-s.ome.EmailForYou@gmail.com
-s.omeE.mailForYou@gmail.com
-s.omeEm.ailForYou@gmail.com
-s.omeEma.ilForYou@gmail.com
-s.omeEmai.lForYou@gmail.com
-s.omeEmail.ForYou@gmail.com
-s.omeEmailF.orYou@gmail.com
-s.omeEmailFo.rYou@gmail.com
-s.omeEmailFor.You@gmail.com
-s.omeEmailForY.ou@gmail.com
-s.omeEmailForYo.u@gmail.com
-so..meEmailForYou@gmail.com
-so.m.eEmailForYou@gmail.com
-so.me.EmailForYou@gmail.com
-so.meE.mailForYou@gmail.com
-so.meEm.ailForYou@gmail.com
-so.meEma.ilForYou@gmail.com
-so.meEmai.lForYou@gmail.com
-so.meEmail.ForYou@gmail.com
-so.meEmailF.orYou@gmail.com
-so.meEmailFo.rYou@gmail.com
-so.meEmailFor.You@gmail.com
-so.meEmailForY.ou@gmail.com
-so.meEmailForYo.u@gmail.com
-
-@@@@@@@@@@@@@@@@@@@@@@@
-
 Based off pikapy by skvvv, which is based off ptc2 Kitryn, which is based off ptcaccount by jepayne1138, etc.
 Also uses pogoapi from keyphact
+``` Update Decembe 21 2016 
+Added -dm true
+
 
 Was updated with several features/fixes on December 20 2016. To update open CMD or terminal
 `pip install --upgrade git+https://github.com/aguita/pikaptcha`
@@ -166,6 +120,50 @@ If you want to automatically verify emails, there are some specific instructions
 Also, to verify emails, you should have a relatively empty inbox. Else it needs to index your whole Inbox folder everytime and that isn't very fun.
 
 The PlusMail trick work as follows. Suppose your name is Mark and you own Mark@gmail.com as your email account. If I send an email to Mark+Jacob@gmail.com, it will still go to Mark@gmail.com. Similarly, if I send an email to Mark+asldksdjek@gmail.com, it will go to Mark@gmail.com. The PlusMail trick takes advantage of the fact that Niantic doesn't check that there isn't a difference between Mark and Mark+Jacob because not all email providers support this. When you use "-m mark@gmail", it will generate emails like Mark+asdkjs@gmail.com differently for each account creation, but all emails will go to Mark@gmail.com. To use the plusmail trick, refer to any example with the argument -m
+
+## Using DotMail
+
+s.omeEmailForYou@gmail.com
+so.meEmailForYou@gmail.com
+som.eEmailForYou@gmail.com
+some.EmailForYou@gmail.com
+someE.mailForYou@gmail.com
+someEm.ailForYou@gmail.com
+someEma.ilForYou@gmail.com
+someEmai.lForYou@gmail.com
+someEmail.ForYou@gmail.com
+someEmailF.orYou@gmail.com
+someEmailFo.rYou@gmail.com
+someEmailFor.You@gmail.com
+someEmailForY.ou@gmail.com
+someEmailForYo.u@gmail.com
+s..omeEmailForYou@gmail.com
+s.o.meEmailForYou@gmail.com
+s.om.eEmailForYou@gmail.com
+s.ome.EmailForYou@gmail.com
+s.omeE.mailForYou@gmail.com
+s.omeEm.ailForYou@gmail.com
+s.omeEma.ilForYou@gmail.com  
+s.omeEmai.lForYou@gmail.com
+s.omeEmail.ForYou@gmail.com
+s.omeEmailF.orYou@gmail.com
+s.omeEmailFo.rYou@gmail.com
+s.omeEmailFor.You@gmail.com
+s.omeEmailForY.ou@gmail.com
+s.omeEmailForYo.u@gmail.com
+so..meEmailForYou@gmail.com
+so.m.eEmailForYou@gmail.com
+so.me.EmailForYou@gmail.com
+so.meE.mailForYou@gmail.com
+so.meEm.ailForYou@gmail.com
+so.meEma.ilForYou@gmail.com
+so.meEmai.lForYou@gmail.com
+so.meEmail.ForYou@gmail.com
+so.meEmailF.orYou@gmail.com
+so.meEmailFo.rYou@gmail.com
+so.meEmailFor.You@gmail.com
+so.meEmailForY.ou@gmail.com
+so.meEmailForYo.u@gmail.com
 
 ## How to use
 Shift+Right Click your desktop and "Open command window here". OR open Terminal if on linux/osx. Note that usernames.txt (the file with the accounts) will be made on your desktop, or wherever you ran terminal/cmd from. To run pikaptcha, just type `pikaptcha` into the cmd/terminal. Do not run from C:\ unless you read Example 10. See examples below.
