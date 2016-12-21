@@ -14,14 +14,17 @@ from pikaptcha.jibber import *
 from pikaptcha.ptcexceptions import *
 from pikaptcha.url import *
 
-user_agent = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) " + "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36")
+user_agent = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) " + "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36")
 
 BASE_URL = "https://club.pokemon.com/us/pokemon-trainer-club"
 
 # endpoints taken from PTCAccount
 SUCCESS_URLS = (
-    'https://club.pokemon.com/us/pokemon-trainer-club/parents/email',  # This initially seemed to be the proper success redirect
-    'https://club.pokemon.com/us/pokemon-trainer-club/sign-up/',  # but experimentally it now seems to return to the sign-up, but still registers
+    'https://club.pokemon.com/us/pokemon-trainer-club/parents/email',
+    # This initially seemed to be the proper success redirect
+    'https://club.pokemon.com/us/pokemon-trainer-club/sign-up/',
+    # but experimentally it now seems to return to the sign-up, but still registers
 )
 
 # As both seem to work, we'll check against both success destinations until I have I better idea for how to check success
@@ -31,23 +34,16 @@ BAD_DATA_URL = 'https://club.pokemon.com/us/pokemon-trainer-club/parents/sign-up
 
 def _random_string(length=15):
     return generate_words(3)
-	
+
+
 def _random_password(length=15):
     a = generate_words(2)
     b = generate_words(1)
-    c = generate_words(1).upper()	
+    c = generate_words(1).upper()
     special_character = ''.join(random.choice('#?!@$%%^&*-') for _ in range(1))
     number = ''.join(random.choice('0123456789') for _ in range(1))
     password = c + special_character + b + number + a
     return password
-	
-
-def _random_email(local_length=10, sub_domain_length=5, top_domain=".com"):
-    return "{local}@{sub_domain}{top_domain}".format(
-        local=_random_string(local_length),
-        sub_domain=_random_string(sub_domain_length),
-        top_domain=top_domain
-    )
 
 
 def _random_birthday():
@@ -58,24 +54,27 @@ def _random_birthday():
     birthday = start + datetime.timedelta(seconds=random_duration)
     return "{year}-{month:0>2}-{day:0>2}".format(year=birthday.year, month=birthday.month, day=birthday.day)
 
-def _insertChar(string, position, chartoinsert ):
-    return string[:position] + chartoinsert + string[position:] 
-	
-def _addPeriodToEmail(string,x, count, a):
+
+def _insertChar(string, position, chartoinsert):
+    return string[:position] + chartoinsert + string[position:]
+
+
+def _addPeriodToEmail(string, x, count, a):
     if count % 3 == 0:
-      newString = _insertChar(string, a, '.')
-      return newString
-    elif count % 3 ==1:
-      newString2 = _insertChar(string, a, '.')
-      newString = _insertChar(newString2, 1, '.')
-      return newString
+        newString = _insertChar(string, a, '.')
+        return newString
+    elif count % 3 == 1:
+        newString2 = _insertChar(string, a, '.')
+        newString = _insertChar(newString2, 1, '.')
+        return newString
     elif count % 3 == 2:
-      newString2 = _insertChar(string, a, '.')
-      newString = _insertChar(newString2, 2, '.')
-      return newString
+        newString2 = _insertChar(string, a, '.')
+        newString = _insertChar(newString2, 2, '.')
+        return newString
     else:
-      return ''
-	
+        return ''
+
+
 def _validate_birthday(birthday):
     # raises PTCInvalidBirthdayException if invalid
     # split by -
@@ -93,7 +92,9 @@ def _validate_birthday(birthday):
         assert len(day) == 2 and day.isdigit()
 
         # Check year is between 1910 and 2002, and also that it's a valid date
-        assert datetime.datetime(year=1910, month=1, day=1) <= datetime.datetime(year=int(year), month=int(month), day=int(day)) <= datetime.datetime(year=2002, month=12, day=31)
+        assert datetime.datetime(year=1910, month=1, day=1) <= datetime.datetime(year=int(year), month=int(month),
+                                                                                 day=int(day)) <= datetime.datetime(
+            year=2002, month=12, day=31)
 
     except (AssertionError, ValueError):
         raise PTCInvalidBirthdayException("Invalid birthday!")
@@ -128,7 +129,9 @@ def create_account(username, password, email, birthday, captchakey2, captchatime
     elem = driver.find_element_by_name("dob")
 
     # Workaround for different region not having the same input type
-    driver.execute_script("var input = document.createElement('input'); input.type='text'; input.setAttribute('name', 'dob'); arguments[0].parentNode.replaceChild(input, arguments[0])", elem)
+    driver.execute_script(
+        "var input = document.createElement('input'); input.type='text'; input.setAttribute('name', 'dob'); arguments[0].parentNode.replaceChild(input, arguments[0])",
+        elem)
 
     elem = driver.find_element_by_name("dob")
     elem.send_keys(birthday)
@@ -163,27 +166,32 @@ def create_account(username, password, email, birthday, captchakey2, captchatime
     driver.find_element_by_name("terms").click()
 
     if captchakey2 == None:
-        #Do manual captcha entry
+        # Do manual captcha entry
         print("You did not pass a 2captcha key. Please solve the captcha manually.")
         elem = driver.find_element_by_class_name("g-recaptcha")
         driver.execute_script("arguments[0].scrollIntoView(true);", elem)
         # Waits 1 minute for you to input captcha
         try:
-            WebDriverWait(driver, 60).until(EC.text_to_be_present_in_element_value((By.NAME, "g-recaptcha-response"), ""))
+            WebDriverWait(driver, 60).until(
+                EC.text_to_be_present_in_element_value((By.NAME, "g-recaptcha-response"), ""))
             print("Waiting on captcha")
             print("Captcha successful. Sleeping for 1 second...")
             time.sleep(1)
         except TimeoutException, err:
             print("Timed out while manually solving captcha")
+            return False
     else:
         # Now to automatically handle captcha
         print("Starting autosolve recaptcha")
         html_source = driver.page_source
+
         gkey_index = html_source.find("https://www.google.com/recaptcha/api2/anchor?k=") + 47
-        gkey = html_source[gkey_index:gkey_index+40]
+        gkey = html_source[gkey_index:gkey_index + 40]
         recaptcharesponse = "Failed"
-        while(recaptcharesponse == "Failed"):
-            recaptcharesponse = openurl("http://2captcha.com/in.php?key=" + captchakey2 + "&method=userrecaptcha&googlekey=" + gkey)
+        while (recaptcharesponse == "Failed"):
+            recaptcharesponse = openurl(
+                "http://2captcha.com/in.php?key=" + captchakey2 + "&method=userrecaptcha&googlekey=" + gkey)
+            "http://2captcha.com/in.php?key={}&method=userrecaptcha&googlekey={}&pageurl=club.pokemon.com".format(captchakey2,gkey,)
         captchaid = recaptcharesponse[3:]
         recaptcharesponse = "CAPCHA_NOT_READY"
         elem = driver.find_element_by_class_name("g-recaptcha")
@@ -191,7 +199,7 @@ def create_account(username, password, email, birthday, captchakey2, captchatime
         start_time = int(time.time())
         timedout = False
         while recaptcharesponse == "CAPCHA_NOT_READY":
-            time.sleep(10)            
+            time.sleep(10)
             elapsedtime = int(time.time()) - start_time
             if elapsedtime > captchatimeout:
                 print("Captcha timeout reached. Exiting.")
@@ -199,14 +207,15 @@ def create_account(username, password, email, birthday, captchakey2, captchatime
                 break
             print "Captcha still not solved, waiting another 10 seconds."
             recaptcharesponse = "Failed"
-            while(recaptcharesponse == "Failed"):
-                recaptcharesponse = openurl("http://2captcha.com/res.php?key=" + captchakey2 + "&action=get&id=" + captchaid)
-        if timedout == False:       
+            while (recaptcharesponse == "Failed"):
+                recaptcharesponse = openurl(
+                    "http://2captcha.com/res.php?key=" + captchakey2 + "&action=get&id=" + captchaid)
+        if timedout == False:
             solvedcaptcha = recaptcharesponse[3:]
             captchalen = len(solvedcaptcha)
             elem = driver.find_element_by_name("g-recaptcha-response")
             elem = driver.execute_script("arguments[0].style.display = 'block'; return arguments[0];", elem)
-            elem.send_keys(solvedcaptcha)      
+            elem.send_keys(solvedcaptcha)
             print "Solved captcha"
     try:
         user.submit()
@@ -216,7 +225,7 @@ def create_account(username, password, email, birthday, captchakey2, captchatime
     try:
         _validate_response(driver)
     except:
-        print("Failed to create user: {}".format(username))		
+        print("Failed to create user: {}".format(username))
         driver.close()
         raise
 
@@ -240,17 +249,22 @@ def _validate_response(driver):
             print ("Username already in use")
             raise PTCInvalidNameException("Username already in use.")
     else:
-        print ("Some other error")
+        print ("Some other error returned by Niantic")
         raise PTCException("Generic failure. User was not created.")
 
 
-def random_account(username=None, password=None, email=None, birthday=None, plusmail=None, recaptcha=None, captchatimeout=1000 ,dotmail=None, numPasses=None, accountsCreated=None,currentPosition=None ):
+def random_account(username=None, password=None, email=None, birthday=None, plusmail=None, recaptcha=None,
+                   captchatimeout=1000, dotmail=None, numPasses=None, accountsCreated=None, currentPosition=None):
     try_username = _random_string() if username is None else str(username)
     password = _random_password() if password is None else str(password)
-    try_email = _random_email() if email is None else str(email)	
-    captchakey2 = None if recaptcha is None else str(recaptcha)	    
-    #Only do plusmail or dotmail, not both.	
-    if plusmail is not None:        
+    if email is None:
+        # raise raise PTCException("Email Required")
+        # Todo:
+        print("")
+    else:
+        try_email = str(email)
+    captchakey2 = None if recaptcha is None else str(recaptcha)
+    if plusmail is not None:
         pm = plusmail.split("@")
         try_email = pm[0] + "+" + try_username + "@" + pm[1]
     try_birthday = _random_birthday() if birthday is None else str(birthday)
@@ -258,26 +272,22 @@ def random_account(username=None, password=None, email=None, birthday=None, plus
     if birthday is not None:
         _validate_birthday(try_birthday)
 
-    account_created = False
-    while not account_created:
-        if dotmail is not None:
-          try_email = _addPeriodToEmail(try_email,accountsCreated,numPasses,currentPosition)
-          print('Email to create account with: '+ try_email)
-        try:
-            account_created = create_account(try_username, password, try_email, try_birthday, captchakey2, captchatimeout)
-        except PTCInvalidNameException:
-            if username is None:
-                try_username = _random_string()
-            else:
-                raise
-        except PTCInvalidEmailException:
-            if email is None:
-                try_email = _random_email()
-            else:
-                raise
+    if dotmail is not None:
+        try_email = _addPeriodToEmail(try_email, accountsCreated, numPasses, currentPosition)
+        print('Email to create account with: ' + try_email)
 
-    return {
-        "username": try_username,
-        "password": password,
-        "email": try_email
-    }
+    account_created = create_account(try_username, password, try_email, try_birthday, captchakey2,
+                                     captchatimeout)
+
+    if account_created is False:
+        return {
+            "username": None,
+            "password": None,
+            "email": None
+        }
+    else:
+        return {
+            "username": try_username,
+            "password": password,
+            "email": try_email
+        }
