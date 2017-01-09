@@ -69,7 +69,7 @@ def parse_arguments(args):
     )
     parser.add_argument(
         '-of', '--outputformat', type=str, default="compact",
-        help='If you choose compact, you get user:pass. If you choose pkgo, you get -u user -p pass'
+        help='If you choose compact, you get user:pass. If you choose pkgo, you get -u user -p pass. If you choose pkgocsv, you get ptc,user,pass.'
     )
     parser.add_argument(
         '-it', '--inputtext', type=str, default=None,
